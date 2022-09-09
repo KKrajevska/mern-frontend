@@ -2,7 +2,7 @@ import styled from "@emotion/styled";
 import { UserT } from "lib/types";
 import React, { FC } from "react";
 import { Card } from "shared/components/UI/Card";
-import { UserItem } from "./UserItem";
+import { UserItem } from "user/components/UserItem";
 
 interface UsersListT {
   items: UserT[];

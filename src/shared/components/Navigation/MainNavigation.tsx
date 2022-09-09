@@ -1,10 +1,10 @@
 import styled from "@emotion/styled";
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
-import { Backdrop } from "../UI/Backdrop";
-import { MainHeader } from "./MainHeader";
-import { NavLinks } from "./NavLinks";
-import { SideDrawer } from "./SideDrawer";
+import { Backdrop } from "shared/components/UI/Backdrop";
+import { MainHeader } from "shared/components/Navigation/MainHeader";
+import { NavLinks } from "shared/components/Navigation/NavLinks";
+import { SideDrawer } from "shared/components/Navigation/SideDrawer";
 
 export const MainNavigation = () => {
   const [drawerIsOpen, setDrawerIsOpen] = useState<boolean>(false);
@@ -19,13 +19,12 @@ export const MainNavigation = () => {
   return (
     <>
       {drawerIsOpen && <Backdrop onClick={closeDrawer} />}
-      {drawerIsOpen && (
-        <SideDrawer>
-          <DrawerNav>
-            <NavLinks />
-          </DrawerNav>
-        </SideDrawer>
-      )}
+
+      <SideDrawer show={drawerIsOpen} onClick={closeDrawer}>
+        <DrawerNav>
+          <NavLinks />
+        </DrawerNav>
+      </SideDrawer>
 
       <MainHeader>
         <Button onClick={openDrawer}>

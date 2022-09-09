@@ -4,3 +4,17 @@ export interface UserT {
   image: string;
   places: number;
 }
+
+export interface LocationT {
+  lat: number;
+  lng: number;
+}
+export interface PlaceT {
+  id: string;
+  title: string;
+  description: string;
+  imageUrl: string;
+  address: string;
+  location: LocationT;
+  creator: string;
+}

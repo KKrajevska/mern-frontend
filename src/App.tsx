@@ -5,6 +5,7 @@ import { BrowserRouter, Route, Routes } from "react-router-dom";
 import { Users } from "user/pages/Users";
 import { NewPlace } from "places/pages/NewPlace";
 import { MainNavigation } from "shared/components/Navigation/MainNavigation";
+import { UserPlaces } from "places/pages/UserPlaces";
 
 function App() {
   return (
@@ -13,6 +14,7 @@ function App() {
       <main style={{ marginTop: "5rem" }}>
         <Routes>
           <Route path="/" element={<Users />} />
+          <Route path="/:userId/places" element={<UserPlaces />} />
           <Route path="places/new" element={<NewPlace />} />
         </Routes>
       </main>
