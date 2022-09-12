@@ -9,16 +9,19 @@ interface UsersListT {
 }
 
 export const UsersList: FC<UsersListT> = ({ items }) => {
-  return items.length > 0 ? (
+  if (items.length === 0) {
+    return (
+      <Card>
+        <h2>No users found.</h2>
+      </Card>
+    );
+  }
+  return (
     <UL>
       {items.map((item, idx) => (
         <UserItem key={idx} {...item} />
       ))}
     </UL>
-  ) : (
-    <Card>
-      <h2>No users found.</h2>
-    </Card>
   );
 };
 

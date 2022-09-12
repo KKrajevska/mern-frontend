@@ -1,11 +1,11 @@
 import React from "react";
-import logo from "./logo.svg";
 import "./App.css";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import { Users } from "user/pages/Users";
 import { NewPlace } from "places/pages/NewPlace";
 import { MainNavigation } from "shared/components/Navigation/MainNavigation";
 import { UserPlaces } from "places/pages/UserPlaces";
+import { UpdatePlace } from "places/pages/UpdatePlace";
 
 function App() {
   return (
@@ -16,6 +16,7 @@ function App() {
           <Route path="/" element={<Users />} />
           <Route path="/:userId/places" element={<UserPlaces />} />
           <Route path="places/new" element={<NewPlace />} />
+          <Route path="/places/:placeId" element={<UpdatePlace />} />
         </Routes>
       </main>
     </BrowserRouter>

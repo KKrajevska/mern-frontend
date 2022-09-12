@@ -18,6 +18,8 @@ interface InputT {
   errorText: string;
   validators: ValidatorT[];
   onInput: (id: InputTypes, value: string, isValid: boolean) => void;
+  value?: string;
+  valid?: boolean;
 }
 
 interface State {
@@ -62,10 +64,12 @@ export const Input: FC<InputT> = ({
   errorText,
   validators,
   onInput,
+  value,
+  valid,
 }) => {
   const [inputState, dispatch] = useReducer(inputReducer, {
-    value: "",
-    isValid: false,
+    value: value || "",
+    isValid: valid || false,
     isTouched: false,
   });
 

@@ -1,6 +1,7 @@
 import styled from "@emotion/styled";
 import { PlaceT } from "lib/types";
 import React, { FC } from "react";
+import { Button } from "shared/components/FormElements/Button";
 import { Card } from "shared/components/UI/Card";
 import { PlaceItem } from "./PlaceItem";
 
@@ -9,19 +10,22 @@ interface PlaceListT {
 }
 
 export const PlaceList: FC<PlaceListT> = ({ items }) => {
-  return items.length > 0 ? (
+  if (items.length === 0) {
+    return (
+      <Wrapper>
+        <Card>
+          <h2>No places found. Maybe create one?</h2>
+          <Button to="/places/new">Share Place</Button>
+        </Card>
+      </Wrapper>
+    );
+  }
+  return (
     <UL>
       {items.map((place, idx) => (
         <PlaceItem place={place} key={idx} />
       ))}
     </UL>
-  ) : (
-    <Wrapper>
-      <Card>
-        <h2>No places found. Maybe create one?</h2>
-        <button>Share Place</button>
-      </Card>
-    </Wrapper>
   );
 };
 
