@@ -1,3 +1,4 @@
+import { css } from "@emotion/react";
 import styled from "@emotion/styled/macro";
 import { UserT } from "lib/types";
 import React, { FC } from "react";
@@ -8,7 +9,7 @@ import { Card } from "shared/components/UI/Card";
 export const UserItem: FC<UserT> = ({ id, image, name, places }) => {
   return (
     <LI>
-      <Card padding="0">
+      <Card cardStyles={cardStyle}>
         <LINK to={`/${id}/places`}>
           <Image>
             <Avatar image={image} alt={name} />
@@ -24,6 +25,10 @@ export const UserItem: FC<UserT> = ({ id, image, name, places }) => {
     </LI>
   );
 };
+
+const cardStyle = css`
+  padding: 0;
+`;
 
 const LI = styled.li`
   margin: 1rem;

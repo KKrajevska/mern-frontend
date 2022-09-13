@@ -7,10 +7,15 @@ import React, {
   useReducer,
 } from "react";
 import { validate, ValidatorT } from "shared/util/validators";
-export type InputTypes = "title" | "description";
+export type InputTypes =
+  | "title"
+  | "description"
+  | "email"
+  | "password"
+  | "name";
 interface InputT {
   elementType: string;
-  id?: InputTypes;
+  id: InputTypes;
   type?: HTMLInputTypeAttribute;
   placeholder?: string;
   label: string;
@@ -40,8 +45,8 @@ const inputReducer = (state: State, action: Action) => {
         ...state,
         value: action.val || "",
         isValid:
-          (action.validators && validate(action.val, action.validators)) ||
-          false,
+          action.validators !== undefined &&
+          validate(action.val, action.validators),
       };
     case "TOUCH": {
       return {
@@ -69,14 +74,12 @@ export const Input: FC<InputT> = ({
 }) => {
   const [inputState, dispatch] = useReducer(inputReducer, {
     value: value || "",
-    isValid: valid || false,
     isTouched: false,
+    isValid: valid || false,
   });
 
   useEffect(() => {
-    if (id) {
-      onInput(id, inputState.value, inputState.isValid);
-    }
+    onInput(id, inputState.value, inputState.isValid);
   }, [id, inputState.value, inputState.isValid, onInput]);
 
   const changeHandler = (

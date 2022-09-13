@@ -9,10 +9,18 @@ interface Description extends Title {}
 
 interface Address extends Title {}
 
+interface Email extends Title {}
+
+interface Password extends Title {}
+
+interface Name extends Title {}
 interface Inputs {
-  title: Title;
-  description: Description;
+  title?: Title;
+  description?: Description;
   address?: Address;
+  email?: Email;
+  password?: Password;
+  name?: Name;
 }
 
 interface State {
@@ -34,11 +42,14 @@ const formReducer = (state: State, action: Actions) => {
     case "INPUT_CHANGE":
       let formIsValid = true;
       for (const inputId in state.inputs) {
-        if (inputId === action.inputId && action.isValid) {
+        const inputs = state.inputs[inputId as InputTypes];
+        if (!inputs) {
+          continue;
+        }
+        if (inputId === action.inputId) {
           formIsValid = formIsValid && action.isValid;
         } else {
-          formIsValid =
-            formIsValid && state.inputs[inputId as InputTypes].isValid;
+          formIsValid = formIsValid && inputs.isValid;
         }
       }
       return {
@@ -67,6 +78,8 @@ export const useForm = (
     inputs: initialInputs,
     isValid: initialFormValidity,
   });
+
+  console.log("val", formState);
 
   const inputHandler = useCallback(
     (id: InputTypes, value: string, isValid: boolean) => {

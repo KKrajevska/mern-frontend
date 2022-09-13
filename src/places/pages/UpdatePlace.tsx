@@ -97,6 +97,7 @@ export const UpdatePlace = () => {
       </Wrapper>
     );
   }
+
   return (
     <Form onSubmit={placeUpdateSubmitHandler}>
       <Input
@@ -107,8 +108,18 @@ export const UpdatePlace = () => {
         validators={[VALIDATOR_REQUIRE()]}
         errorText="Please enter a valid title."
         onInput={() => {}}
-        value={formState.inputs.title.value}
-        valid={formState.inputs.title.isValid}
+        value={
+          formState &&
+          formState.inputs &&
+          formState.inputs.title &&
+          formState.inputs.title.value
+        }
+        valid={
+          formState &&
+          formState.inputs &&
+          formState.inputs.title &&
+          formState.inputs.title.isValid
+        }
       />
       <Input
         id="description"
@@ -117,8 +128,18 @@ export const UpdatePlace = () => {
         validators={[VALIDATOR_MINLENGTH(5)]}
         errorText="Please enter a valid description (min. 5 characters)."
         onInput={inputHandler}
-        value={formState.inputs.description.value}
-        valid={formState.inputs.description.isValid}
+        value={
+          formState &&
+          formState.inputs &&
+          formState.inputs.description &&
+          formState.inputs.description.value
+        }
+        valid={
+          formState &&
+          formState.inputs &&
+          formState.inputs.description &&
+          formState.inputs.description.isValid
+        }
       />
       <Button type="submit" disabled={!formState.isValid}>
         UPDATE PLACE

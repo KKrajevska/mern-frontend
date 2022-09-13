@@ -19,6 +19,7 @@ const ModalOverlay: FC<ModalOverlayT> = ({
   children,
   footer,
   padding,
+  textAlign,
 }) => {
   const content = (
     <ModalWrapper padding={padding}>
@@ -27,7 +28,7 @@ const ModalOverlay: FC<ModalOverlayT> = ({
       </ModalHeader>
       <form onSubmit={onSubmit ? onSubmit : (event) => event.preventDefault()}>
         <ModalContent>{children}</ModalContent>
-        <Footer>{footer}</Footer>
+        <Footer textAlign={textAlign}>{footer}</Footer>
       </form>
     </ModalWrapper>
   );
@@ -66,8 +67,9 @@ const ModalContent = styled.div`
   padding: 1rem 0.5rem;
 `;
 
-const Footer = styled.footer`
+const Footer = styled.footer<{ textAlign?: string }>`
   padding: 1rem 0.5rem;
+  text-align: ${(props) => props.textAlign && props.textAlign};
 `;
 
 interface ModalT {

@@ -35,7 +35,9 @@ export const VALIDATOR_MAX = (val: any) => ({
   type: VALIDATOR_TYPE_MAX,
   val: val,
 });
-export const VALIDATOR_EMAIL = () => ({ type: VALIDATOR_TYPE_EMAIL });
+export const VALIDATOR_EMAIL = (): ValidatorT => ({
+  type: VALIDATOR_TYPE_EMAIL,
+});
 
 export interface ValidatorT {
   type: typeof ValidatorTypes[number];

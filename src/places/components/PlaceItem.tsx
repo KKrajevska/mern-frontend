@@ -1,3 +1,4 @@
+import { css } from "@emotion/react";
 import styled from "@emotion/styled";
 import { PlaceT } from "lib/types";
 import React, { FC, useState } from "react";
@@ -12,10 +13,22 @@ interface PlaceItemT {
 
 export const PlaceItem: FC<PlaceItemT> = ({ place }) => {
   const [showMap, setShowMap] = useState<boolean>(false);
+  const [showConfirmModal, setShowConfirmModal] = useState<boolean>(false);
 
   const openMapHandler = () => setShowMap(true);
   const closeMapHandler = () => setShowMap(false);
+  const showDeleteWarningHandler = () => {
+    setShowConfirmModal(true);
+  };
 
+  const cancelDeleteHandler = () => {
+    setShowConfirmModal(false);
+  };
+
+  const confirmDeleteHandler = () => {
+    setShowConfirmModal(false);
+    console.log("DELETING...");
+  };
   return (
     <>
       <Modal
@@ -32,9 +45,32 @@ export const PlaceItem: FC<PlaceItemT> = ({ place }) => {
           textAlign: "right",
           footer: <Button onClick={closeMapHandler}>CLOSE</Button>,
         }}
-      ></Modal>
+      />
+      <Modal
+        show={showConfirmModal}
+        onCancel={cancelDeleteHandler}
+        modalOverlay={{
+          children: (
+            <p>
+              Do you want to proceed and delete this place? Please note that it
+              can't be undone thereafter.
+            </p>
+          ),
+          header: "Are you sure?",
+          footer: (
+            <>
+              <Button inverse onClick={cancelDeleteHandler}>
+                CANCEL
+              </Button>
+              <Button danger onClick={confirmDeleteHandler}>
+                DELETE
+              </Button>
+            </>
+          ),
+        }}
+      />
       <LI>
-        <Card padding={"0"}>
+        <Card cardStyles={cardStyle}>
           <Image>
             <Img src={place.imageUrl} alt={place.title} />
           </Image>
@@ -48,13 +84,19 @@ export const PlaceItem: FC<PlaceItemT> = ({ place }) => {
               VIEW ON MAP
             </Button>
             <Button to={`/places/${place.id}`}>EDIT</Button>
-            <Button danger>DELETE</Button>
+            <Button danger onClick={showDeleteWarningHandler}>
+              DELETE
+            </Button>
           </Actions>
         </Card>
       </LI>
     </>
   );
 };
+
+const cardStyle = css`
+  padding: 0;
+`;
 
 const LI = styled.li`
   margin: 1rem 0;
