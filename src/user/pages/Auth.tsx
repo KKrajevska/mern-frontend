@@ -1,9 +1,10 @@
 import { css } from "@emotion/react";
 import styled from "@emotion/styled";
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import { Button } from "shared/components/FormElements/Button";
 import { Input } from "shared/components/FormElements/Input";
 import { Card } from "shared/components/UI/Card";
+import { AuthContext } from "shared/context/authContext";
 import { useForm } from "shared/hooks/formHook";
 import {
   VALIDATOR_EMAIL,
@@ -12,6 +13,7 @@ import {
 } from "shared/util/validators";
 
 export const Auth = () => {
+  const auth = useContext(AuthContext);
   const [isLoginMode, setIsLoginMode] = useState<boolean>(true);
 
   const [formState, inputHandler, setFormData] = useForm(
@@ -58,6 +60,7 @@ export const Auth = () => {
   const authSubmitHandler = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     console.log(formState.inputs);
+    auth.login();
   };
 
   return (

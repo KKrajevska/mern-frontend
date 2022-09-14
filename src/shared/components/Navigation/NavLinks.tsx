@@ -1,22 +1,36 @@
 import styled from "@emotion/styled";
-import React from "react";
+import React, { useContext } from "react";
 import { NavLink } from "react-router-dom";
+import { AuthContext } from "shared/context/authContext";
 
 export const NavLinks = () => {
+  const auth = useContext(AuthContext);
+
   return (
     <UL>
       <LI>
         <NAVLINK to="/">ALL USERS</NAVLINK>
       </LI>
-      <LI>
-        <NAVLINK to="/u1/places">MY PLACES</NAVLINK>
-      </LI>
-      <LI>
-        <NAVLINK to="/places/new">ADD PLACE</NAVLINK>
-      </LI>
-      <LI>
-        <NAVLINK to="/auth">AUTHENTICATE</NAVLINK>
-      </LI>
+      {auth.isLoggedIn && (
+        <LI>
+          <NAVLINK to="/u1/places">MY PLACES</NAVLINK>
+        </LI>
+      )}
+      {auth.isLoggedIn && (
+        <LI>
+          <NAVLINK to="/places/new">ADD PLACE</NAVLINK>
+        </LI>
+      )}
+      {!auth.isLoggedIn && (
+        <LI>
+          <NAVLINK to="/auth">AUTHENTICATE</NAVLINK>
+        </LI>
+      )}
+      {auth.isLoggedIn && (
+        <LI>
+          <Button onClick={auth.logout}>LOGOUT</Button>
+        </LI>
+      )}
     </UL>
   );
 };
@@ -67,4 +81,13 @@ const NAVLINK = styled(NavLink)`
     color: white;
     text-decoration: none;
   }
+`;
+
+const Button = styled.button`
+  cursor: pointer;
+  border: 1px solid #292929;
+  color: #292929;
+  background: transparent;
+  padding: 0.5rem;
+  font: inherit;
 `;

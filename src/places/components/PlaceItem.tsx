@@ -1,17 +1,19 @@
 import { css } from "@emotion/react";
 import styled from "@emotion/styled";
 import { PlaceT } from "lib/types";
-import React, { FC, useState } from "react";
+import React, { FC, useContext, useState } from "react";
 import { Button } from "shared/components/FormElements/Button";
 import { Card } from "shared/components/UI/Card";
 import { Map } from "shared/components/UI/Map";
 import { Modal } from "shared/components/UI/Modal";
+import { AuthContext } from "shared/context/authContext";
 
 interface PlaceItemT {
   place: PlaceT;
 }
 
 export const PlaceItem: FC<PlaceItemT> = ({ place }) => {
+  const auth = useContext(AuthContext);
   const [showMap, setShowMap] = useState<boolean>(false);
   const [showConfirmModal, setShowConfirmModal] = useState<boolean>(false);
 
@@ -83,10 +85,14 @@ export const PlaceItem: FC<PlaceItemT> = ({ place }) => {
             <Button inverse onClick={openMapHandler}>
               VIEW ON MAP
             </Button>
-            <Button to={`/places/${place.id}`}>EDIT</Button>
-            <Button danger onClick={showDeleteWarningHandler}>
-              DELETE
-            </Button>
+            {auth.isLoggedIn && (
+              <Button to={`/places/${place.id}`}>EDIT</Button>
+            )}
+            {auth.isLoggedIn && (
+              <Button danger onClick={showDeleteWarningHandler}>
+                DELETE
+              </Button>
+            )}
           </Actions>
         </Card>
       </LI>
