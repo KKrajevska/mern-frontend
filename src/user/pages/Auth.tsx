@@ -1,9 +1,11 @@
 import { css } from "@emotion/react";
 import styled from "@emotion/styled";
+import { APIError } from "api/errors";
 import React, { useContext, useState } from "react";
 import { Button } from "shared/components/FormElements/Button";
 import { Input } from "shared/components/FormElements/Input";
 import { Card } from "shared/components/UI/Card";
+import { LoadingSpinner } from "shared/components/UI/LoadingSpinner";
 import { AuthContext } from "shared/context/authContext";
 import { useForm } from "shared/hooks/formHook";
 import {
@@ -15,6 +17,8 @@ import {
 export const Auth = () => {
   const auth = useContext(AuthContext);
   const [isLoginMode, setIsLoginMode] = useState<boolean>(true);
+  const [isLoading, setisLoading] = useState<boolean>(false);
+  const [error, seterror] = useState<string | null>();
 
   const [formState, inputHandler, setFormData] = useForm(
     {
@@ -57,14 +61,37 @@ export const Auth = () => {
     setIsLoginMode((prevMode) => !prevMode);
   };
 
-  const authSubmitHandler = (event: React.FormEvent<HTMLFormElement>) => {
+  const authSubmitHandler = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    console.log(formState.inputs);
+
+    if (isLoginMode) {
+    } else {
+      try {
+        setisLoading(true);
+        const response = await fetch("http://localhost:5000/api/users/signup", {
+          method: "POST",
+          headers: { "Content-type": "application/json" },
+          body: JSON.stringify({
+            name: formState.inputs.name?.value,
+            email: formState.inputs.email?.value,
+            password: formState.inputs.password?.value,
+          }),
+        });
+        const responseData = await response.json();
+        console.log("response", responseData);
+      } catch (err) {
+        if (err instanceof APIError) {
+          seterror(err.message);
+        }
+      }
+    }
+    setisLoading(false);
     auth.login();
   };
 
   return (
     <Card cardStyles={CardStyle}>
+      {isLoading && <LoadingSpinner asOverlay />}
       <h2>Login Required</h2>
       <hr />
       <Form onSubmit={authSubmitHandler}>

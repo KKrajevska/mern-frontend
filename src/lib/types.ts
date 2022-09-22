@@ -18,3 +18,7 @@ export interface PlaceT {
   location: LocationT;
   creator: string;
 }
+
+export interface ErrorT {
+  message?: string;
+}
