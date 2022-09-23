@@ -13,7 +13,7 @@ export const NavLinks = () => {
       </LI>
       {auth.isLoggedIn && (
         <LI>
-          <NAVLINK to="/u1/places">MY PLACES</NAVLINK>
+          <NAVLINK to={`/${auth.userId}/places`}>MY PLACES</NAVLINK>
         </LI>
       )}
       {auth.isLoggedIn && (

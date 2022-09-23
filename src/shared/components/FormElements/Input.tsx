@@ -12,7 +12,8 @@ export type InputTypes =
   | "description"
   | "email"
   | "password"
-  | "name";
+  | "name"
+  | "address";
 interface InputT {
   elementType: string;
   id: InputTypes;

@@ -4,7 +4,7 @@ import { Modal } from "./Modal";
 
 interface ErrorModalT {
   onClear: () => void;
-  error: string;
+  error: string | null;
 }
 
 export const ErrorModal: FC<ErrorModalT> = ({ onClear, error }) => {

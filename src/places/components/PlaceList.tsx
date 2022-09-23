@@ -7,9 +7,10 @@ import { PlaceItem } from "./PlaceItem";
 
 interface PlaceListT {
   items: PlaceT[];
+  onDelete: (deletedPlaceId: string) => void;
 }
 
-export const PlaceList: FC<PlaceListT> = ({ items }) => {
+export const PlaceList: FC<PlaceListT> = ({ items, onDelete }) => {
   if (items.length === 0) {
     return (
       <Wrapper>
@@ -23,7 +24,7 @@ export const PlaceList: FC<PlaceListT> = ({ items }) => {
   return (
     <UL>
       {items.map((place, idx) => (
-        <PlaceItem place={place} key={idx} />
+        <PlaceItem place={place} key={idx} onDelete={onDelete} />
       ))}
     </UL>
   );

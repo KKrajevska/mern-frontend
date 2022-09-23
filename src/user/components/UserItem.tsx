@@ -7,6 +7,7 @@ import { Avatar } from "shared/components/UI/Avatar";
 import { Card } from "shared/components/UI/Card";
 
 export const UserItem: FC<UserT> = ({ id, image, name, places }) => {
+  const placesLength = places.length;
   return (
     <LI>
       <Card cardStyles={cardStyle}>
@@ -17,7 +18,7 @@ export const UserItem: FC<UserT> = ({ id, image, name, places }) => {
           <HWrapper>
             <H2>{name}</H2>
             <H3>
-              {places} {places === 1 ? "Place" : "Places"}
+              {placesLength} {placesLength === 1 ? "Place" : "Places"}
             </H3>
           </HWrapper>
         </LINK>

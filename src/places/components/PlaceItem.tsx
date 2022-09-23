@@ -4,16 +4,22 @@ import { PlaceT } from "lib/types";
 import React, { FC, useContext, useState } from "react";
 import { Button } from "shared/components/FormElements/Button";
 import { Card } from "shared/components/UI/Card";
+import { ErrorModal } from "shared/components/UI/ErrorModal";
+import { LoadingSpinner } from "shared/components/UI/LoadingSpinner";
 import { Map } from "shared/components/UI/Map";
 import { Modal } from "shared/components/UI/Modal";
 import { AuthContext } from "shared/context/authContext";
+import { Method, useHttpClient } from "shared/hooks/httpHook";
 
 interface PlaceItemT {
   place: PlaceT;
+  onDelete: (deletedPlaceId: string) => void;
 }
 
-export const PlaceItem: FC<PlaceItemT> = ({ place }) => {
+export const PlaceItem: FC<PlaceItemT> = ({ place, onDelete }) => {
   const auth = useContext(AuthContext);
+  const { isLoading, error, sendRequest, clearError } = useHttpClient();
+
   const [showMap, setShowMap] = useState<boolean>(false);
   const [showConfirmModal, setShowConfirmModal] = useState<boolean>(false);
 
@@ -27,12 +33,20 @@ export const PlaceItem: FC<PlaceItemT> = ({ place }) => {
     setShowConfirmModal(false);
   };
 
-  const confirmDeleteHandler = () => {
+  const confirmDeleteHandler = async () => {
     setShowConfirmModal(false);
-    console.log("DELETING...");
+    try {
+      await sendRequest(
+        `http://localhost:5000/api/places/${place.id}`,
+        Method.DELETE
+      );
+      onDelete(place.id);
+    } catch (err) {}
   };
+
   return (
     <>
+      <ErrorModal error={error} onClear={clearError} />
       <Modal
         show={showMap}
         onCancel={closeMapHandler}
@@ -73,8 +87,9 @@ export const PlaceItem: FC<PlaceItemT> = ({ place }) => {
       />
       <LI>
         <Card cardStyles={cardStyle}>
+          {isLoading && <LoadingSpinner asOverlay />}
           <Image>
-            <Img src={place.imageUrl} alt={place.title} />
+            <Img src={place.image} alt={place.title} />
           </Image>
           <Info>
             <H2>{place.title}</H2>
@@ -85,7 +100,7 @@ export const PlaceItem: FC<PlaceItemT> = ({ place }) => {
             <Button inverse onClick={openMapHandler}>
               VIEW ON MAP
             </Button>
-            {auth.isLoggedIn && (
+            {auth.userId === place.creator && (
               <Button to={`/places/${place.id}`}>EDIT</Button>
             )}
             {auth.isLoggedIn && (

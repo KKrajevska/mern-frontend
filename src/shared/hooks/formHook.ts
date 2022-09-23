@@ -79,8 +79,6 @@ export const useForm = (
     isValid: initialFormValidity,
   });
 
-  console.log("val", formState);
-
   const inputHandler = useCallback(
     (id: InputTypes, value: string, isValid: boolean) => {
       dispatch({

@@ -1,8 +1,10 @@
 export interface UserT {
   id: string;
   name: string;
+  email: string;
+  password: string;
   image: string;
-  places: number;
+  places: PlaceT[];
 }
 
 export interface LocationT {
@@ -13,7 +15,7 @@ export interface PlaceT {
   id: string;
   title: string;
   description: string;
-  imageUrl: string;
+  image: string;
   address: string;
   location: LocationT;
   creator: string;
