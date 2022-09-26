@@ -9,7 +9,7 @@ import { ErrorModal } from "shared/components/UI/ErrorModal";
 import { LoadingSpinner } from "shared/components/UI/LoadingSpinner";
 import { AuthContext } from "shared/context/authContext";
 import { useForm } from "shared/hooks/formHook";
-import { Method, useHttpClient } from "shared/hooks/httpHook";
+import { apiHeaders, Method, useHttpClient } from "shared/hooks/httpHook";
 import { VALIDATOR_MINLENGTH, VALIDATOR_REQUIRE } from "shared/util/validators";
 
 export const UpdatePlace = () => {
@@ -69,7 +69,8 @@ export const UpdatePlace = () => {
           title: formState.inputs.title && formState.inputs.title.value,
           description:
             formState.inputs.description && formState.inputs.description.value,
-        })
+        }),
+        apiHeaders()
       );
       navigate("/" + auth.userId + "/places");
     } catch (err) {}

@@ -7,7 +7,7 @@ import { ErrorModal } from "shared/components/UI/ErrorModal";
 import { LoadingSpinner } from "shared/components/UI/LoadingSpinner";
 import { AuthContext } from "shared/context/authContext";
 import { useForm } from "shared/hooks/formHook";
-import { Method, useHttpClient } from "shared/hooks/httpHook";
+import { apiHeaders, Method, useHttpClient } from "shared/hooks/httpHook";
 import { VALIDATOR_MINLENGTH, VALIDATOR_REQUIRE } from "shared/util/validators";
 
 export const NewPlace = () => {
@@ -47,7 +47,8 @@ export const NewPlace = () => {
             formState.inputs.description && formState.inputs.description.value,
           address: formState.inputs.address && formState.inputs.address.value,
           creator: auth.userId,
-        })
+        }),
+        apiHeaders()
       );
       navigate("/");
     } catch (err) {}

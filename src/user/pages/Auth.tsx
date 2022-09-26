@@ -3,13 +3,14 @@ import styled from "@emotion/styled";
 import { UserT } from "lib/types";
 import React, { useContext, useState } from "react";
 import { Button } from "shared/components/FormElements/Button";
+import { ImageUpload } from "shared/components/FormElements/ImageUpload";
 import { Input } from "shared/components/FormElements/Input";
 import { Card } from "shared/components/UI/Card";
 import { ErrorModal } from "shared/components/UI/ErrorModal";
 import { LoadingSpinner } from "shared/components/UI/LoadingSpinner";
 import { AuthContext } from "shared/context/authContext";
 import { useForm } from "shared/hooks/formHook";
-import { Method, useHttpClient } from "shared/hooks/httpHook";
+import { apiHeaders, Method, useHttpClient } from "shared/hooks/httpHook";
 import {
   VALIDATOR_EMAIL,
   VALIDATOR_MINLENGTH,
@@ -41,6 +42,7 @@ export const Auth = () => {
         {
           ...formState.inputs,
           name: undefined,
+          image: undefined,
         },
         formState.inputs.email !== undefined &&
           formState.inputs.email.isValid &&
@@ -53,6 +55,10 @@ export const Auth = () => {
           ...formState.inputs,
           name: {
             value: "",
+            isValid: false,
+          },
+          image: {
+            value: null,
             isValid: false,
           },
         },
@@ -74,22 +80,32 @@ export const Auth = () => {
             email: formState.inputs.email && formState.inputs.email.value,
             password:
               formState.inputs.password && formState.inputs.password.value,
-          })
+          }),
+          apiHeaders()
         );
 
         auth.login(responseData.user.id);
       } catch (err) {}
     } else {
       try {
+        const email = (formState.inputs.email &&
+          formState.inputs.email.value) as string;
+        const name = (formState.inputs.name &&
+          formState.inputs.name.value) as string;
+        const password = (formState.inputs.password &&
+          formState.inputs.password.value) as string;
+        const image = (formState.inputs.image &&
+          formState.inputs.image.value) as File;
+        const formData = new FormData();
+        formData.append("email", email);
+        formData.append("name", name);
+        formData.append("password", password);
+        formData.append("image", image);
+
         const responseData: { user: UserT } = await sendRequest(
           "http://localhost:5000/api/users/signup",
           Method.POST,
-          JSON.stringify({
-            name: formState.inputs.name && formState.inputs.name.value,
-            email: formState.inputs.email && formState.inputs.email.value,
-            password:
-              formState.inputs.password && formState.inputs.password.value,
-          })
+          formData
         );
 
         auth.login(responseData.user.id);
@@ -116,6 +132,7 @@ export const Auth = () => {
               onInput={inputHandler}
             />
           )}
+          {!isLoginMode && <ImageUpload id="image" onInput={inputHandler} />}
           <Input
             elementType="input"
             id="email"

@@ -1,7 +1,7 @@
 import { useCallback, useReducer } from "react";
 import { InputTypes } from "shared/components/FormElements/Input";
 interface Title {
-  value: string;
+  value: string | File | null;
   isValid: boolean;
 }
 
@@ -14,6 +14,7 @@ interface Email extends Title {}
 interface Password extends Title {}
 
 interface Name extends Title {}
+interface Image extends Title {}
 interface Inputs {
   title?: Title;
   description?: Description;
@@ -21,6 +22,7 @@ interface Inputs {
   email?: Email;
   password?: Password;
   name?: Name;
+  image?: Image;
 }
 
 interface State {
@@ -33,7 +35,7 @@ type Actions =
       type: "INPUT_CHANGE";
       isValid: boolean;
       inputId: InputTypes;
-      value: string;
+      value: string | File | null;
     }
   | { type: "SET_DATA"; inputs: Inputs; formIsValid: boolean };
 
@@ -80,7 +82,7 @@ export const useForm = (
   });
 
   const inputHandler = useCallback(
-    (id: InputTypes, value: string, isValid: boolean) => {
+    (id: InputTypes, value: string | File | null, isValid: boolean) => {
       dispatch({
         type: "INPUT_CHANGE",
         value: value,
@@ -104,7 +106,7 @@ export const useForm = (
 
   return [formState, inputHandler, setFormData] as [
     State,
-    (id: InputTypes, value: string, isValid: boolean) => void,
+    (id: InputTypes, value: string | File | null, isValid: boolean) => void,
     (inputData: Inputs, formValidity: boolean) => void
   ];
 };

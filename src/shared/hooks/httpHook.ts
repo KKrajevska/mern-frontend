@@ -9,7 +9,7 @@ export enum Method {
   PATCH = "PATCH",
 }
 
-const apiHeaders = () => ({
+export const apiHeaders = () => ({
   // Authorization: `Bearer ${Token.get()}`,
   "Content-Type": "application/json",
 });
@@ -21,7 +21,12 @@ export const useHttpClient = () => {
   const activeHttpRequests = useRef<AbortController[]>([]);
 
   const sendRequest = useCallback(
-    async (url: string, method: Method = Method.GET, body: any = null) => {
+    async (
+      url: string,
+      method: Method = Method.GET,
+      body: any = null,
+      headers?: Record<"Content-Type", string>
+    ) => {
       setIsLoading(true);
       const httpAbortCtrl = new AbortController();
       activeHttpRequests.current.push(httpAbortCtrl);
@@ -30,7 +35,7 @@ export const useHttpClient = () => {
         const response = await fetch(url, {
           method,
           body,
-          headers: apiHeaders(),
+          headers,
           signal: httpAbortCtrl.signal,
         });
 
