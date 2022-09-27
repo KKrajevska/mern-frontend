@@ -13,7 +13,7 @@ export const UserItem: FC<UserT> = ({ id, image, name, places }) => {
       <Card cardStyles={cardStyle}>
         <LINK to={`/${id}/places`}>
           <Image>
-            <Avatar image={image} alt={name} />
+            <Avatar  image={`http://localhost:5000/${image}`} alt={name} />
           </Image>
           <HWrapper>
             <H2>{name}</H2>

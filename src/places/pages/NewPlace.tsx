@@ -2,12 +2,13 @@ import styled from "@emotion/styled";
 import React, { useContext } from "react";
 import { useNavigate } from "react-router-dom";
 import { Button } from "shared/components/FormElements/Button";
+import { ImageUpload } from "shared/components/FormElements/ImageUpload";
 import { Input } from "shared/components/FormElements/Input";
 import { ErrorModal } from "shared/components/UI/ErrorModal";
 import { LoadingSpinner } from "shared/components/UI/LoadingSpinner";
 import { AuthContext } from "shared/context/authContext";
 import { useForm } from "shared/hooks/formHook";
-import { apiHeaders, Method, useHttpClient } from "shared/hooks/httpHook";
+import { Method, useHttpClient } from "shared/hooks/httpHook";
 import { VALIDATOR_MINLENGTH, VALIDATOR_REQUIRE } from "shared/util/validators";
 
 export const NewPlace = () => {
@@ -27,6 +28,10 @@ export const NewPlace = () => {
         value: "",
         isValid: false,
       },
+      image: {
+        value: null,
+        isValid: false,
+      },
     },
     false
   );
@@ -38,18 +43,28 @@ export const NewPlace = () => {
   ) => {
     event.preventDefault();
     try {
+      const formData = new FormData();
+      const title = (formState.inputs.title &&
+        formState.inputs.title.value) as string;
+      const description = (formState.inputs.description &&
+        formState.inputs.description.value) as string;
+      const address = (formState.inputs.address &&
+        formState.inputs.address.value) as string;
+      const userId = auth.userId as string;
+      const image = (formState.inputs.image &&
+        formState.inputs.image.value) as File;
+
+      formData.append("title", title);
+      formData.append("description", description);
+      formData.append("address", address);
+      formData.append("creator", userId);
+      formData.append("image", image);
       await sendRequest(
         "http://localhost:5000/api/places",
         Method.POST,
-        JSON.stringify({
-          title: formState.inputs.title && formState.inputs.title.value,
-          description:
-            formState.inputs.description && formState.inputs.description.value,
-          address: formState.inputs.address && formState.inputs.address.value,
-          creator: auth.userId,
-        }),
-        apiHeaders()
+        formData
       );
+
       navigate("/");
     } catch (err) {}
   };
@@ -82,6 +97,11 @@ export const NewPlace = () => {
           validators={[VALIDATOR_REQUIRE()]}
           errorText="Please enter a valid address."
           onInput={inputHandler}
+        />
+        <ImageUpload
+          id="image"
+          onInput={inputHandler}
+          errorText="Please provide an image."
         />
         <Button type="submit" disabled={!formState.isValid}>
           ADD PLACE

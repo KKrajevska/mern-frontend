@@ -89,7 +89,10 @@ export const PlaceItem: FC<PlaceItemT> = ({ place, onDelete }) => {
         <Card cardStyles={cardStyle}>
           {isLoading && <LoadingSpinner asOverlay />}
           <Image>
-            <Img src={place.image} alt={place.title} />
+            <Img
+              src={`http://localhost:5000/${place.image}`}
+              alt={place.title}
+            />
           </Image>
           <Info>
             <H2>{place.title}</H2>
