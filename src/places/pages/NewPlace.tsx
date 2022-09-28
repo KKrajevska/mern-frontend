@@ -62,7 +62,10 @@ export const NewPlace = () => {
       await sendRequest(
         "http://localhost:5000/api/places",
         Method.POST,
-        formData
+        formData,
+        {
+          Authorization: `Bearer ${auth.token}`,
+        }
       );
 
       navigate("/");

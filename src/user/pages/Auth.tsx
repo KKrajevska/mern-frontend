@@ -1,6 +1,6 @@
 import { css } from "@emotion/react";
 import styled from "@emotion/styled";
-import { UserT } from "lib/types";
+import { AuthResponse } from "lib/types";
 import React, { useContext, useState } from "react";
 import { Button } from "shared/components/FormElements/Button";
 import { ImageUpload } from "shared/components/FormElements/ImageUpload";
@@ -10,7 +10,7 @@ import { ErrorModal } from "shared/components/UI/ErrorModal";
 import { LoadingSpinner } from "shared/components/UI/LoadingSpinner";
 import { AuthContext } from "shared/context/authContext";
 import { useForm } from "shared/hooks/formHook";
-import { apiHeaders, Method, useHttpClient } from "shared/hooks/httpHook";
+import { Method, useHttpClient } from "shared/hooks/httpHook";
 import {
   VALIDATOR_EMAIL,
   VALIDATOR_MINLENGTH,
@@ -73,7 +73,7 @@ export const Auth = () => {
 
     if (isLoginMode) {
       try {
-        const responseData: { user: UserT } = await sendRequest(
+        const responseData: AuthResponse = await sendRequest(
           "http://localhost:5000/api/users/login",
           Method.POST,
           JSON.stringify({
@@ -81,10 +81,12 @@ export const Auth = () => {
             password:
               formState.inputs.password && formState.inputs.password.value,
           }),
-          apiHeaders()
+          {
+            "Content-Type": "application/json",
+          }
         );
 
-        auth.login(responseData.user.id);
+        auth.login(responseData.userId, responseData.token);
       } catch (err) {}
     } else {
       try {
@@ -102,13 +104,13 @@ export const Auth = () => {
         formData.append("password", password);
         formData.append("image", image);
 
-        const responseData: { user: UserT } = await sendRequest(
+        const responseData: AuthResponse = await sendRequest(
           "http://localhost:5000/api/users/signup",
           Method.POST,
           formData
         );
 
-        auth.login(responseData.user.id);
+        auth.login(responseData.userId, responseData.token);
       } catch (err) {}
     }
   };

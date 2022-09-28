@@ -38,7 +38,11 @@ export const PlaceItem: FC<PlaceItemT> = ({ place, onDelete }) => {
     try {
       await sendRequest(
         `http://localhost:5000/api/places/${place.id}`,
-        Method.DELETE
+        Method.DELETE,
+        null,
+        {
+          Authorization: `Bearer ${auth.token}`,
+        }
       );
       onDelete(place.id);
     } catch (err) {}

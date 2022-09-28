@@ -9,11 +9,6 @@ export enum Method {
   PATCH = "PATCH",
 }
 
-export const apiHeaders = () => ({
-  // Authorization: `Bearer ${Token.get()}`,
-  "Content-Type": "application/json",
-});
-
 export const useHttpClient = () => {
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
@@ -25,7 +20,7 @@ export const useHttpClient = () => {
       url: string,
       method: Method = Method.GET,
       body: any = null,
-      headers?: Record<"Content-Type", string>
+      headers?: HeadersInit
     ) => {
       setIsLoading(true);
       const httpAbortCtrl = new AbortController();

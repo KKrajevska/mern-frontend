@@ -24,3 +24,9 @@ export interface PlaceT {
 export interface ErrorT {
   message?: string;
 }
+
+export interface AuthResponse {
+  userId: string;
+  email: string;
+  token: string;
+}
