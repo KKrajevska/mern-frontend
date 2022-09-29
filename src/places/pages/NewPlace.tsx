@@ -50,17 +50,15 @@ export const NewPlace = () => {
         formState.inputs.description.value) as string;
       const address = (formState.inputs.address &&
         formState.inputs.address.value) as string;
-      const userId = auth.userId as string;
       const image = (formState.inputs.image &&
         formState.inputs.image.value) as File;
 
       formData.append("title", title);
       formData.append("description", description);
       formData.append("address", address);
-      formData.append("creator", userId);
       formData.append("image", image);
       await sendRequest(
-        "http://localhost:5000/api/places",
+        `${process.env.REACT_APP_API_URL}/places`,
         Method.POST,
         formData,
         {

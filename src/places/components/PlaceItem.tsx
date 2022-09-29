@@ -37,7 +37,7 @@ export const PlaceItem: FC<PlaceItemT> = ({ place, onDelete }) => {
     setShowConfirmModal(false);
     try {
       await sendRequest(
-        `http://localhost:5000/api/places/${place.id}`,
+        `${process.env.REACT_APP_API_URL}/places/${place.id}`,
         Method.DELETE,
         null,
         {
@@ -94,7 +94,7 @@ export const PlaceItem: FC<PlaceItemT> = ({ place, onDelete }) => {
           {isLoading && <LoadingSpinner asOverlay />}
           <Image>
             <Img
-              src={`http://localhost:5000/${place.image}`}
+              src={`${process.env.REACT_APP_ASSET_URL}${place.image}`}
               alt={place.title}
             />
           </Image>
